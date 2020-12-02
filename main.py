@@ -40,7 +40,6 @@ def textrank(text):
     # lemmatization
     lemmatizer = WordNetLemmatizer()
     words = [{lemmatizer.lemmatize(i) for i in sentence} for sentence in words]
-
     # Set weights to ribs
     pairs = combinations(range(len(sentences)), 2)
     scores = [(i, j, similarity(words[i], words[j])) for i, j in pairs]
@@ -55,10 +54,11 @@ def textrank(text):
                   key=lambda x: pr[x[0]], reverse=True)
 
 
-def extract(text, n=5):
+def extract(text, persent=50):
     '''Basic procedure. Return referat'''
     tr = textrank(text)
-    top_n = sorted(tr[:n])
+    needsen = int(len(tr) * persent / 100)
+    top_n = sorted(tr[:needsen])
     return '\n'.join(x[2] for x in top_n)
 
 
@@ -72,4 +72,4 @@ def preprocessing(text):
 
 textexample = "В присутствии управдома Ивана Васильевича Бунши Шурик испытывает машину на небольшой мощности, и стена между квартирами Шурика и Шпака исчезает. Увидев пришельцев и приняв их за демонов, Феофан убегает за стражей, а Иван Грозный пугается чёрной кошки и убегает в квартиру Шурика. На обеде Иван Васильевич Бунша заигрывает с миловидной Марфой Васильевной (супругой Ивана Грозного) и приходит в состояние алкогольного опьянения. Но, наконец, срабатывает починенная Шуриком машина времени и Иван Васильевич Бунша с Жоржем Милославским вбегают в свой XX век. Воспользовавшись суматохой, из машины «Скорой помощи» выбегает Иван Грозный и бежит в квартиру к Шурику, который снова запускает свою машину."
 
-print(extract(textexample, 3))
+print(extract(textexample, 100))
